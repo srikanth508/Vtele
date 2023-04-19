@@ -1,0 +1,163 @@
+<!-- <div class="container-fluid card card:hover headerspace">
+  <div class="row headerspace headercolor">
+    <div class="col-lg-5">
+      <h5>{{labels[0].employyeRgistration}}</h5>
+    </div>
+    <div class="col-lg-5">
+    </div>
+
+  </div>
+</div>
+
+<div class="container-fluid card card:hover" style="margin-top:20px;">
+  <br>
+  <div class="row">
+    <div class="col-lg-3">
+      <label>{{labels[0].staff_Type}} :</label>
+    </div>
+    <div class="col-lg-4">
+      <select class="form-control" [(ngModel)]="StaffTypeID" (change)="GetStaffTypeID($event)">
+        <option *ngIf="languageid=='1'" value="0" selected>Select </option>
+        <option *ngIf="languageid=='6'" value="0" selected>Sélectionner </option>
+        <option *ngIf="languageid=='1'" value="1" selected>Delivery Supervisor</option>
+        <option *ngIf="languageid=='1'" value="2" selected>Delivery Executive</option>
+        <option *ngIf="languageid=='1'" value="3" selected>Other</option>
+        <option *ngIf="languageid=='6'" value="1" selected>Livreur</option>
+        <option *ngIf="languageid=='6'" value="2" selected>Autre</option>
+        <option *ngIf="languageid=='6'" value="3" selected>Other</option>
+      </select>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-lg-3">
+      <label class="dname_label">{{labels[0].name}} :</label>
+      <span class="required">*</span>
+    </div>
+    <div class="col-lg-4">
+      <input type="text" placeholder="{{labels[0].name}}" required class="form-control" [(ngModel)]="name" name="name"
+        onkeypress='return(event.charCode>=65&&event.charCode<=90)||(event.charCode>=97&&event.charCode<=122)||event.charCode==32||event.charCode==46'>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-lg-3">
+      <label class="dname_label">{{labels[0].phoneNo}} :</label>
+      <span class="required">*</span>
+    </div>
+    <div class="col-lg-4">
+      <input type="number" maxlength="10" placeholder="{{labels[0].phoneNo}}" name="phno" [(ngModel)]="phno" required
+        class="form-control">
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-lg-3">
+      <label class="dname_label">{{labels[0].email}} :</label>
+      <span class="required">*</span>
+    </div>
+    <div class="col-lg-4">
+      <input type="text" class="form-control" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" id="email"
+        name="email" [(ngModel)]="email" #emailref="ngModel" placeholder="{{labels[0].email}}">
+      <div *ngIf="emailref.errors &&(emailref.touched || emailref.dirty)" class="aler alert-danger">
+        <div [hidden]="!emailref.errors?.pattern">
+          {{labels[0].enterEmail}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-lg-3">
+      <label class="dname_label">{{labels[0].address}} :</label>
+      <span class="required">*</span>
+    </div>
+    <div class="col-lg-4">
+      <textarea class="form-control" rows="3" name="address" [(ngModel)]="address"
+        placeholder="{{labels[0].address}}"></textarea>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-lg-3">
+      <label for="" class="reglabel">{{labels[0].identityProof}} :</label>
+      <span class="required">*</span>
+    </div>
+    <div class="col-lg-4" *ngIf="idprof=='0'">
+      <ngx-dropzone [multiple]="false" (change)="onidUpload($event)" class="dropzone_vendorinvoice h-100">
+
+        <ngx-dropzone-label>{{dropzonelable}}</ngx-dropzone-label>
+      </ngx-dropzone>
+    </div>
+    <div class="col-lg-4" *ngIf="idprof=='1'">
+      <img src="{{showidproof}}" style="width: 100%;">
+    </div>
+    <div class="col-lg-5 specforimg">
+      <p *ngIf="languageid=='1'">
+        NOTE :Image size should be less than <b>1MB</b> and accepted only in <b>JPG , PNG and JPEG</b> formats.
+      </p>
+      <p *ngIf="languageid=='6'">
+        REMARQUE: la taille de l'image doit être inférieure à <b> 1 Mo </b> et acceptée uniquement aux formats <b> JPG,
+          PNG et JPEG </b>.
+      </p>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-lg-3">
+      <label for="" class="reglabel">{{labels[0].photo}} :</label>
+      <span class="required">*</span>
+    </div>
+    <div class="col-lg-4" *ngIf="photo=='0'">
+      <ngx-dropzone [multiple]="false" (change)="onattachmentUpload($event)" class="dropzone_vendorinvoice h-100">
+        <ngx-dropzone-label>{{dropzonelable}}</ngx-dropzone-label>
+      </ngx-dropzone>
+    </div>
+    <div class="col-lg-4" *ngIf="photo=='1'">
+      <img src="{{showphoto}}" style="width: 100%;">
+    </div>
+    <div class="col-lg-5 specforimg">
+      <p *ngIf="languageid=='1'">
+        NOTE :Image size should be less than <b>1MB</b> and accepted only in <b>JPG , PNG and JPEG</b> formats.
+      </p>
+      <p *ngIf="languageid=='6'">
+        REMARQUE: la taille de l'image doit être inférieure à <b> 1 Mo </b> et acceptée uniquement aux formats <b> JPG,
+          PNG et JPEG </b>.
+      </p>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-lg-3">
+      <label class="dname_label">{{labels[0].username}} :</label>
+      <span class="required">*</span>
+    </div>
+    <div class="col-lg-4">
+      <input type="text" placeholder="{{labels[0].username}}" required class="form-control" [(ngModel)]="username"
+        name="username">
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-lg-3">
+      <label class="dname_label">{{labels[0].password}} :</label>
+      <span class="required">*</span>
+    </div>
+    <div class="col-lg-4">
+      <input type="text" maxlength="10" placeholder="{{labels[0].password}}" name="password" [(ngModel)]="password"
+        required class="form-control">
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-lg-5">
+    </div>
+    <div class="col-lg-2">
+      <button type="button" (click)="InsertDeliveryPartners()"
+        class="btn btn-block btn-md allbtns btncolor">{{labels[0].save}}</button>
+    </div>
+    <div class="col-lg-5">
+    </div>
+  </div>
+  <br>
+</div> -->

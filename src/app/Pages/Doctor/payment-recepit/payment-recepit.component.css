@@ -1,0 +1,12 @@
+.font{
+    font-size: 20px;
+}
+
+.background{
+    background-image:url("../../../../assets/Images/doc.jpg");
+}
+
+.underline{
+    text-decoration: underline;
+    width: 100%;
+}

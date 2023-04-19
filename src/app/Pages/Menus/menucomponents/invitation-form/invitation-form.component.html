@@ -1,0 +1,49 @@
+<app-toastpopup [messageID]="messageID" [typeofPopUp]="typeofPopUp" *ngIf="showPopup==1"></app-toastpopup>
+<app-loader *ngIf="loader==true"></app-loader>
+<app-sms></app-sms>
+<br>
+<div class="container-fluid">
+    <form #invitationForm="ngForm">
+        <div class="row">
+            <div class="col-lg-12">
+                <h5 class="headings">{{labels.invitationMaster}}</h5>
+            </div>
+            <div class="col-lg-8"></div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputfield" id="floatingInput" placeholder="Chapter name"
+                            [(ngModel)]="noOfInstalations" name="numberofconverted" required>
+                        <label for="floatingInput" class="floatingLabel">{{labels.numberofconverted}}<span
+                                class="required">*</span></label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control inputfield" id="floatingInput" placeholder="Chapter name"
+                            [(ngModel)]="amount" name="depositintowallet" required>
+                        <label for="floatingInput" class="floatingLabel">{{labels.depositintowallet}}<span
+                                class="required">*</span></label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-9"></div>
+                <div class="col-lg-2">
+                    <button type="button" class="save" (click)="InsertDetails()" *ngIf="showbutton!=0"
+                        [disabled]="invitationForm.form.invalid">{{labels.save}}</button>
+                    <button type="button" class="save" *ngIf="showbutton==0"
+                        (click)="Updatedetails()">{{labels.update}}</button>
+                </div>
+                <div class="col-lg-1">
+                    <button type="button" class="save" routerLink="/menus/Invitationmaster">{{labels.back}}</button>
+                </div>
+            </div>
+        </div>
+        <br>
+    </form>
+</div>

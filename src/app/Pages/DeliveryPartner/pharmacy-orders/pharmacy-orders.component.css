@@ -1,0 +1,41 @@
+.asignbtn {
+    background-color: black;
+    color: white;
+    border: none;
+    width: 60px;
+}
+
+.asignedbtn {
+    background-color: yellow;
+    color: black;
+    border: none;
+    width: 60px;
+}
+
+.headerspace {
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+.assign {
+    padding: 5px;
+    border: 2px solid #12b0e8;
+    color: #12b0e8;
+    border-radius: 10px;
+    font-weight: 600;
+    width: 100px;
+    margin-top: 5px;
+    font-size: 10px;
+}
+
+.assign:hover {
+    padding: 5px;
+    border: 2px solid #12b0e8;
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    width: 100px;
+    margin-top: 5px;
+    background-color: #12b0e8;
+    font-size: 10px;
+}

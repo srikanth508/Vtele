@@ -1,0 +1,539 @@
+<app-loader *ngIf="loader==true"></app-loader>
+<app-toastpopup [messageID]="messageID" [typeofPopUp]="typeofPopUp" *ngIf="showPopup==1"></app-toastpopup>
+<div class="container-fluid headercard card-hover headerspace">
+  <div class="row">
+    <div class="col-lg-8">
+      <h5 class="headings" data-bs-toggle="modal" data-bs-target="#chat">{{labels.myAppointments}}</h5>
+    </div>
+  </div>
+</div>
+<div class="container-fluid card card-hover headerspace ">
+  <div class="row">
+
+    <div class="col-lg-3">
+      <input type="text" placeholder="Select Date" class="form-control" bsDaterangepicker [(ngModel)]="bsRangeValue"
+        (ngModelChange)="selectDate(bsRangeValue)" [bsConfig]="{ isAnimated: true }"
+        [bsConfig]="{ showWeekNumbers:false }"><br>
+    </div><br>
+
+    <div class="col-lg-5 main">
+      <button class="all" (click)="getAllAppts()">{{labels.allopenappts}}</button>
+      <button class="all" (click)="getTodayAppts()"> {{labels.todayAppts}}</button>
+    </div>
+    <br>
+    <div class="col-lg-3">
+      <br>
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control inputfield" id="floatingInput" placeholder="Search"
+          [(ngModel)]="search">
+        <label for="floatingInput" class="floatingLabel">{{labels.search}}</label>
+      </div>
+    </div>
+    <div class="col-lg-1 countClass">
+      <label>{{labels.count}} : {{count}}</label>
+    </div>
+  </div>
+  <div class="row ">
+    <div class="col-lg-12 tableoverflow">
+      <table class="table table-hover">
+        <tr>
+          <th>{{labels.appointmentdate}}</th>
+          <th>{{labels.appointmentTime}}</th>
+          <th>{{labels.appointmentType}}</th>
+          <th>{{labels.appointmentNumber}}</th>
+          <th>{{labels.patientName}}</th>
+          <th>{{labels.phoneNumber}}</th>
+          <th>{{labels.patientDetails}}</th>
+          <th>{{labels.reasonForVisit}}</th>
+          <th class="thwidth">{{labels.actions}}</th>
+          <th>{{labels.status}}</th>
+          <th class="thwidth">{{labels.previousVisitDocuments}}</th>
+        </tr>
+        <tr [style.background-color]="details.appointmentColorCode"
+          *ngFor="let details of appointmentList|filter:search| paginate: { id: 'foo', itemsPerPage: 10, currentPage: p}">
+          <td>{{details.appoinmentttdate}}</td>
+          <td>{{details.slots}}</td>
+          <td>
+
+            <!-- early call -->
+            <!--  [disabled]="details.isVisited=='1' &&details.bookingTypeID=='2'&& details.completed=='2'||details.disableall=='0'||details.cancelled=='1'||details.docCancelled=='1'" -->
+            <button class="Video" *ngIf="details.appointmentTypeID=='2'&&details.bookingTypeID=='2'&&details.earlycall=='2'"
+              (click)="startEarlyVideoCall(details)">{{labels.startVideo}}
+            </button>
+
+            <!-- normal call -->
+            <!--  [disabled]="details.isVisited=='1'&&details.bookingTypeID=='2' && details.completed=='2'||details.disableall=='0'||details.cancelled=='1'||details.docCancelled=='1'"
+              -->
+            <button class="Video"
+              *ngIf="details.appointmentTypeID=='2'&&details.bookingTypeID=='2'&&details.earlycall=='0'||details.earlycall=='1'||details.earlycall=='3'"
+              (click)="normalVideoCall(details)">{{labels.startVideo}}</button>
+
+            <!-- onDemand -->
+            <button class="ondemandVideo" *ngIf="details.bookingTypeID=='1'"
+              (click)="onDemandVideo(details)">{{labels.ondemandVideo}}</button>
+
+            <!-- In CLinic -->
+            <button class="InClinic" *ngIf="details.appointmentTypeID=='1'">{{labels.inClinic}}</button>
+            <!-- Home Visit -->
+            <button class="HomeVisit" *ngIf="details.appointmentTypeID=='5'">{{labels.homeVisit}}</button>
+          </td>
+          <td>{{details.appointmentID}}</td>
+          <td>{{details.patientName}}
+
+          </td>
+          <td>+{{details.countryCodeNew}} {{details.primarymobileno}}</td>
+          <td>
+            <!-- {{details.age}} -->
+            <table>
+              <tr style="background: transparent;">
+                <td class="tdclass">
+                  <img src="assets/Icons/info.png" class="info" (click)="getSelectedDetails(details,16)">
+                </td>
+
+                <td class="tdclass">
+                  <img src="assets/Icons/patientdoc.png" *ngIf="details.uploadrepornotexist!='0'" class="imgwidth"
+                    (click)="getReport(details.illnesspdf)">
+                </td>
+                <td class="tdclass">
+                  <img src="assets/Icons/play.png" *ngIf="details.videoexist==1" data-bs-toggle="modal" class="imgwidth"
+                    data-bs-target="#Videos" (click)="GetVedioID(details.appointmentID)" style="width: 25px;">
+                </td>
+                <td class="tdclass">
+                  <img src="assets/Icons/imagephoto.png" (click)="GetImagesID(details.appointmentID)"
+                    data-bs-toggle="modal" class="imgwidth" data-bs-target="#Photos" *ngIf="details.photoexist==1"
+                    tyle="width: 25px;">
+                </td>
+                <td class="tdclass">
+                  <img src="assets/Icons/patientdoc.png" *ngIf="details.reportUrl!='0'" class="imgwidth"
+                    (click)="getReport(details.reportUrl)">
+                </td>
+              </tr>
+            </table>
+            <!-- 
+              <img src="assets/Icons/attachment_16.png" *ngIf="details.reportUrl!='0'"
+              (click)="getDiagnosticReport(details.reportURl)"> -->
+          </td>
+          <td>{{details.reasonForVisit}}</td>
+          <td>
+            <!-- Accept Appointment -->
+            <button class="Accept"
+              *ngIf="details.accepted=='0'&&details.isVisited=='0'&&details.cancelled=='0'&&details.docCancelled=='0'"
+              (click)="getSelectedDetails(details,1)">{{labels.accept}}</button><br>
+
+            <!-- Cancel Appointment -->
+            <button class="Cancel"
+              *ngIf="details.cancelled=='0'&&details.docCancelled=='0'&&details.isVisited=='0'&&details.bookingTypeID=='1'"
+              (click)="getSelectedDetails(details,2)">{{labels.cancel}}</button>
+
+            <!-- Cancel Appointment -->
+            <button class="Cancel"
+              *ngIf="details.cancelled=='0'&&details.docCancelled=='0'&&details.isVisited=='0'&&details.bookingTypeID!='1'&&details.doctorCancelvalidation=='1'"
+              (click)="getSelectedDetails(details,2)">{{labels.cancel}}</button>
+
+
+            <div>
+              <select class="form-control" (change)="getTypeID($event,details)" *ngIf="details.accepted=='1'">
+                <option value="0">{{labels.select}}</option>
+                <option value="1">{{labels.addPrescription}}</option>
+                <option value="2">{{labels.addTest}}</option>
+                <option value="3">{{labels.addsoapNotes}}</option>
+                <option value="4">{{labels.addMedicalCertificate}}</option>
+                <option value="35" *ngIf="details.accepted=='1'&&details.isVisited==0&&details.noShow=='0'">
+                  {{labels.completed}}</option>
+
+                <option
+                  *ngIf="details.accepted=='1'&&details.cancelled=='0'&&details.docCancelled=='0'&&details.noShow=='0'&&details.isVisited=='0'&&details.earlycall=='0'&&details.earlycallvalidation=='0'&&details.bookingTypeID=='2'&&startdate==details.appdate"
+                  value="6">{{labels.earlyCall}}</option>
+
+                <option value="5">{{labels.addreferalLetter}}</option>
+
+
+                <option
+                  *ngIf="details.accepted=='1'&&details.isVisited=='0'&&details.cancelled=='0'&&details.docCancelled=='0'&&details.noShow=='0'&&details.appointmentTypeID!='5'"
+                  value="14">{{labels.notVisited}}</option>
+
+                <option
+                  *ngIf="details.accepted==true&&details.refundBit==false&&details.appointmentTypeID==2&&details.followApp==false"
+                  value="7">{{labels.refund}}</option>
+
+                <option
+                  *ngIf="(details.isVisited=='1' && details.completed=='2'&&details.videoCallReJoin=='0')||(details.disableall=='0'&&details.cancelled=='0'&&details.docCancelled=='0')"
+                  value="8">{{labels.freeCall}}</option>
+                <option *ngIf="details.isVisited=='1'&&details.followUpVisit=='0'&&details.followApp=='0'" value="9">
+                  {{labels.followUpVisit}}</option>
+
+                <option value="15">{{labels.uploadDocuments}}</option>
+                <option value="17">{{labels.consultationReport}}</option>
+                <option value="22" *ngIf="details.isVisited=='1'&&details.reportBit=='0'&&details.payPayment=='1'">
+                  {{labels.receipt}}</option>
+              </select>
+            </div>
+          </td>
+          <!-- Status Column -->
+          <td>
+            <label *ngIf="details.followApp=='1'" style="color:red;font-size: 5px;">{{labels.followUp}}</label>
+
+            <label *ngIf=" details.accepted=='1' &&details.cancelled=='0' &&details.docCancelled=='0'
+                  &&details.isVisited=='0' &&details.noShow=='0'&&details.earlycall=='0'"
+              class="AcceptLable">{{labels.accepted}}</label>
+
+            <label *ngIf="details.earlycall=='1'&&details.isVisited=='0'"
+              style="color: red;">{{labels.waitingForReponse}}</label>
+
+            <label *ngIf="details.earlycall=='2'&&details.isVisited=='0'"
+              style="color: red;">{{labels.earlyCallAccepted}}
+            </label>
+
+            <label *ngIf="details.earlycall=='3'&&details.isVisited=='0'"
+              style="color: red;">{{labels.earlyCallRejected}}
+            </label>
+            <label *ngIf="details.cancelled=='1'" style="color: red;">{{labels.patientCancelled}}</label>
+
+            <label *ngIf="details.docCancelled=='1'" style="color: red;">{{labels.doctorCancelled}}</label>
+
+            <label *ngIf="details.isVisited=='1'" style="color: orange;">{{labels.completed}}</label>
+            <label *ngIf="details.noShow=='1'" style="color: orange;">{{labels.notVisited}}</label>
+
+            <label *ngIf="details.inclinicNoShow=='1'&&details.accepted==1">{{labels.autocomplete}}</label>
+
+          </td>
+          <td>
+            <div *ngIf="details.cancelled=='0'&&details.docCancelled=='0'&&details.noShow=='0'&&details.accepted=='1'">
+              <select class="form-control" (change)="getTypeID($event,details)">
+                <option value="0">{{labels.select}} </option>
+                <option value="10">{{labels.previousPrescription}}</option>
+                <option value="11">{{labels.previousDiagnosticTest}}</option>
+                <option value="12">{{labels.previousSoapNotes}}</option>
+                <option value="13">{{labels.previousMedicalCertificate}}</option>
+              </select>
+            </div>
+
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="col-lg-12" style="text-align: end">
+    <pagination-controls id="foo" (pageChange)="pageChanged($event)" previousLabel="{{labels.previous}}"
+      nextLabel="{{labels.next}}" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+      screenReaderCurrentLabel="You're on page">
+    </pagination-controls>
+  </div>
+</div>
+<br>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content card card-hover">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="typeID==1">{{labels.addPrescription}}</h5>
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="typeID==2">{{labels.addTest}}</h5>
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="typeID==3">{{labels.addsoapNotes}}</h5>
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="typeID==4">{{labels.addMedicalCertificate}}</h5>
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="typeID==5">{{labels.addreferalLetter}}</h5>
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="typeID==16">{{labels.patientDocuments}}</h5>
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="typeID==10">{{labels.previousPrescriptions}}</h5>
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="typeID==11">{{labels.previousTest}}</h5>
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="typeID==12">{{labels.previousSoapNotess}}</h5>
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="typeID==13">{{labels.previousMedicalCertificates}}</h5>
+
+
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body modai-height">
+        <div *ngIf="typeID==1">
+          <app-prescriptions [Details]="[selectedAppointment]" (close)="close($event)" (showLoader)="showLoader()"
+            (StopLoader)="StopLoader()" (sendEmail)="sendEmail($event)">
+          </app-prescriptions>
+        </div>
+        <div *ngIf="typeID==2">
+          <app-diagnostc-test [Details]="[selectedAppointment]" (close)="close($event)" (showLoader)="showLoader()"
+            (StopLoader)="StopLoader()" (sendEmail)="sendEmail($event)">
+          </app-diagnostc-test>
+        </div>
+        <div *ngIf="typeID==3">
+          <app-soap-notes [Details]="[selectedAppointment]" (close)="close($event)" (showLoader)="showLoader()"
+            (StopLoader)="StopLoader()" (Message)="Message($event)"></app-soap-notes>
+        </div>
+        <div *ngIf="typeID==4">
+          <app-medicalcertificate [Details]="[selectedAppointment]" (close)="close($event)" (showLoader)="showLoader()"
+            (StopLoader)="StopLoader()" (sendEmail)="sendEmail($event)" *ngIf="typeID==4"></app-medicalcertificate>
+        </div>
+        <div *ngIf="typeID==5">
+          <app-doctor-referals [Details]="[selectedAppointment]" (close)="close($event)" (showLoader)="showLoader()"
+            (StopLoader)="StopLoader()" (Message)="Message($event)" (sendEmail)="sendEmail($event)" *ngIf="typeID==5">
+          </app-doctor-referals>
+        </div>
+        <div>
+          <app-previous-prescriptions [Details]="[selectedAppointment]" (closePopUp)="closePopUp($event)"
+            [typeID]="typeID" *ngIf="typeID==10">
+          </app-previous-prescriptions>
+          <app-previous-prescriptions [Details]="[selectedAppointment]" (closePopUp)="closePopUp($event)"
+            [typeID]="typeID" *ngIf="typeID==11">
+          </app-previous-prescriptions>
+          <app-previous-prescriptions [Details]="[selectedAppointment]" (closePopUp)="closePopUp($event)"
+            [typeID]="typeID" *ngIf="typeID==12">
+          </app-previous-prescriptions>
+          <app-previous-prescriptions [Details]="[selectedAppointment]" (closePopUp)="closePopUp($event)"
+            [typeID]="typeID" *ngIf="typeID==13">
+          </app-previous-prescriptions>
+        </div>
+        <div *ngIf="typeID==16">
+          <app-patient-documents [Details]="[selectedAppointment]" *ngIf="typeID==16"
+            (openAllergies)="openAllergies($event)" (closeDocumentsModal)="closeDocumentsModal()">
+          </app-patient-documents>
+        </div>
+
+
+        <!-- </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn close" data-bs-dismiss="modal" (click)="closeModal()">{{labels.close}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="followUp" data-bs-backdrop="false" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content card card-hover">
+      <div class="modal-header">
+        <span class="modal-title modaltitle" id="staticBackdropLabel">{{labels.pleaseSelect}}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-12">
+              <input type="radio" value="1" [(ngModel)]="followupAppointmentTypeID"
+                name="followupAppointmentTypeID">&nbsp;{{labels.inClinic}} &nbsp; &nbsp;
+              <input type="radio" value="2" [(ngModel)]="followupAppointmentTypeID"
+                name="followupAppointmentTypeID">&nbsp;{{labels.videoConference}} &nbsp; &nbsp;
+              <input type="radio" value="5" [(ngModel)]="followupAppointmentTypeID"
+                name="followupAppointmentTypeID">&nbsp;{{labels.homeVisit}}&nbsp; &nbsp;
+            </div>
+
+          </div><br>
+
+        </div>
+        <p></p>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="close" data-bs-dismiss="modal">{{labels.close}}</button>
+        <button type="button" class="save" (click)="doSomething()" data-bs-dismiss="modal">{{labels.save}}</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="uploadDocuments" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content card card-hover">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="typeID==15">{{labels.uploadDocuments}}</h5>
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="typeID==17">{{labels.consultationReport}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="typeID==15">
+          <app-upload-prescriptions [Details]="[selectedAppointment]" (close)="close($event)"
+            (showLoader)="showLoader()" (Message)="Message($event)" *ngIf="typeID==15"></app-upload-prescriptions>
+        </div>
+        <div *ngIf="typeID==17">
+          <app-check-pdfs [Details]="[selectedAppointment]" (generatePDF)="generatePDF($event)"
+            (showLoader)="showLoader()" *ngIf="typeID==17"></app-check-pdfs>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="close" data-bs-dismiss="modal">{{labels.close}}</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="generatePDF" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content card card-hover">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5> -->
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="typeID==18">
+          <app-generate-pdfs [Details]="[selectedAppointment]" [checkedList]="[checkedList]" (showLoader)="showLoader()"
+            (StopLoader)="StopLoader()" (Message)="Message($event)" (closeGeneratePopUP)="closeGeneratePopUP($event)"
+            *ngIf="typeID==18">
+          </app-generate-pdfs>
+        </div>
+        <div *ngIf="typeID==22">
+          <app-payment-recepit [Details]="[selectedAppointment]" (showLoader)="showLoader()"
+            (closeReceipt)="closeReceipt($event)" *ngIf="typeID==22">
+          </app-payment-recepit>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="close" data-bs-dismiss="modal">{{labels.close}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="AllergiesModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content card card-hover">
+      <div class="modal-header">
+        <h6 *ngIf="typeID==26">{{labels.editVaccine}}</h6>
+        <h6 *ngIf="typeID==27">{{labels.editAllergies}}</h6>
+        <h6 *ngIf="typeID==29">{{labels.medicalCertificates}}</h6>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div *ngIf="typeID==26">
+          <app-vaccine [Details]="[selectedAppointment]" [typeID]="typeID"
+            (CloseVaccinePopUp)="CloseVaccinePopUp($event)" *ngIf="typeID==26"></app-vaccine>
+        </div>
+        <div *ngIf="typeID==27">
+          <app-vaccine [Details]="[selectedAppointment]" [typeID]="typeID"
+            (CloseVaccinePopUp)="CloseVaccinePopUp($event)" *ngIf="typeID==27"></app-vaccine>
+        </div>
+        <div *ngIf="typeID==29">
+          <p [innerHTML]="description"></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="close" data-bs-dismiss="modal">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div class="modal fade" id="Photos" data-bs-backdrop="false" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" style="float: right;width: 55%;">
+    <div class="modal-content card">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5> -->
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-12" *ngFor="let showphoto of showimages">
+              <br>
+              <img src="{{showphoto.photoURL}}" style="height:auto; width: 98%;" />
+              <br>
+            </div>
+            <br>
+          </div>
+          <br>
+
+          <br>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="close" data-bs-dismiss="modal">{{labels.close1}}</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="Videos" data-bs-backdrop="false" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" style="float: right;width: 55%;">
+    <div class="modal-content card">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5> -->
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body ">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-12" *ngFor="let showvedio of showvedioes">
+              <br>
+              <div class="video">
+                <video controls id="videoPlayer" autoplay style="width: 98%;">
+                  <source src="{{showvedio.videoUrl}}" type="video/mp4" /> Browser
+                  not
+                  supported
+                </video>
+              </div>
+            </div>
+            <br>
+          </div>
+
+          <br>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="close" data-bs-dismiss="modal">{{labels.close1}}</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div style="top:30%;float: left;position: absolute;margin-left: 800px;height: 500px;" *ngIf="typeID==20">
+  <app-doctor-chat [Details]="[selectedAppointment]" (closechatMessage)="closechatMessage()" *ngIf="typeID==20">
+  </app-doctor-chat>
+</div>

@@ -1,0 +1,153 @@
+<div class="container-fluid card card:hover headerspace">
+  <div class="row headerspace">
+    <div class="col-lg-6">
+      <h5>{{labels.phamacyDeliveryOrders}}</h5>
+    </div>
+  </div>
+</div><br>
+<div class="container-fluid card card:hover">
+  <div class="row" style="margin-top: 20px;">
+    <div class="col-lg-3">
+      <input type="text" placeholder="{{labels.selectDate}}" class="form-control" bsDaterangepicker
+        [(ngModel)]="bsRangeValue" (ngModelChange)="selectedDate(bsRangeValue)" [bsConfig]="{ isAnimated: true }">
+    </div>
+    <div class="col-lg-3">
+      <input type="text" class="form-control" [(ngModel)]="term" placeholder="{{labels.search}}">
+    </div>
+  </div><br>
+  <div class="row">
+    <div class="col-lg-12" style="overflow: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>{{"Order Date"}}</th>
+            <th>{{labels.orderNumber}}</th>
+            <!-- <th>{{labels.prescriptiontype}}</th> -->
+            <th>{{labels.pharmacyname}}</th>
+            <!-- <th>{{labels.phoneNo}} </th> -->
+            <th>{{labels.pickupaddress}}</th>
+            <th>{{labels.customername}}</th>
+            <th>{{labels.customerphoneno}}</th>
+            <th>{{labels.deliveryAddress}}</th>
+            <th>{{labels.orderstatus}}</th>
+            <th>{{labels.assignto}}</th>
+            <th>{{labels.assignphoneno}}</th>
+            <th>{{labels.actions}}</th>
+            <!-- <th>{{labels.medicines}}</th> -->
+            <!-- <th>{{labels.status}}</th>
+            <th>{{labels.actions}}</th> -->
+          </tr>
+          <tr *ngFor="let details of orderlist|filter:term">
+            <td>{{details.date}}</td>
+            <td>{{details.id}}</td>
+            <!-- <td>
+              <span *ngIf="details.orderType=='1'">Online</span>
+              <span *ngIf="details.orderType=='2'">Photo</span>
+            </td> -->
+            <td>{{details.pharmacyName}}</td>
+            <!-- <td>{{details.mobileNumber}}</td> -->
+            <td>{{details.pharmacyaddress}}</td>
+            <td>{{details.patientName}}</td>
+            <td>{{details.mobileNumber}}</td>
+            <td>{{details.address}}</td>
+            <td>
+              <span style="color:green">{{details.status}}</span>
+            </td>
+            <td>{{details.partnerName}}</td>
+            <td>{{details.partnerPhoneNo}}</td>
+            <td>
+              <button  *ngIf="details.assignBit=='0'" class="assign" data-bs-toggle="modal" data-bs-target="#asssignmodal">{{labels.assign}}</button>
+            </td>
+          </tr>
+        </thead>
+      </table><br>
+    </div><br>
+  </div><br>
+</div><br><br><br>
+<!-- 
+
+<div id="asssign" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{labels.assign}}</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <table>
+              <tr>
+                <td style="background-color: #f18235;color:white">{{labels.agentname}}</td>
+                <td style="background-color: #f18235;color:white">{{labels.agentphoneno}}</td>
+                <td style="background-color: #f18235;color:white">{{labels.assignedJobs}}</td>
+
+                <td style="background-color: #f18235;color:white">{{labels.assign}}</td>
+              </tr>
+              <tr *ngFor="let details of partnerlist|filter:term">
+                <td>{{details.name}}</td>
+                <td>{{details.phoneNo}}</td>
+                <td>{{details.asiignordersCount}}</td>
+                <td>
+                  <button type="button" style="background-color: #00b0f0; color: white;  width: 75px;"
+                    (click)="asssign(details.id)" class="asignbtn" data-dismiss="modal">{{labels.assign}}</button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" style="background-color: #f18235; color: white;" class="btn btn-default"
+          data-dismiss="modal">{{"close"}}</button>
+      </div>
+    </div>
+  </div>
+</div>  -->
+
+
+<div id="asssignmodal" class="modal fade"  data-bs-backdrop="static" data-bs-keyboard="false"
+  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content card">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">{{labels.assign}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+
+          <!-- Assign  -->
+
+          <div class="row">
+            <div class="col-lg-12">
+              <table>
+                <tr>
+                  <th>{{labels.agentname}}</th>
+                  <th>{{labels.agentphoneno}}</th>
+                  <th>{{labels.assignedJobs}}</th>
+                  <th>{{labels.assign}}</th>
+                </tr>
+                <tr *ngFor="let details of partnerlist|filter:term">
+                  <td>{{details.name}}</td>
+                  <td>{{details.phoneNo}}</td>
+                  <td>{{details.asiignordersCount}}</td>
+                  <td>
+                    <button
+                      (click)="asssign(details.id)" class="assign" data-dismiss="modal">{{labels.assign}}</button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="close" data-bs-dismiss="modal">{{labels.close}}</button>
+
+      </div>
+    </div>
+  </div>
+
+</div>

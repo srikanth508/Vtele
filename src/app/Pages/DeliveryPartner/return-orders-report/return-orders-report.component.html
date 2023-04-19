@@ -1,0 +1,89 @@
+<div class="container-fluid card card:hover headerspace">
+  <div class="row headerspace">
+    <div class="col-lg-9" style="margin-top: -2px;">
+      <h5 *ngIf="languageid=='1'">{{labels.shoppingreturnreport}}</h5>
+      <h5 *ngIf="languageid=='6'">RAPPORTS DE RETOUR D’ACHAT</h5>
+    </div>
+    <div class="col-lg-3" style="margin-top: -12px;text-align: end;">
+      <!-- <button class="btn  btncolor" (click)="getglmasterexcel()">{{labels.export_To_Excel}}</button> -->
+    </div>
+  </div>
+</div>
+<br>
+<div class="container-fluid card card:hover">
+  <div class="row" style="margin-top: 20px;">
+    <div class="col-lg-3">
+      <!-- <ng-daterangepicker [(ngModel)]="value" [options]="options" (ngModelChange)="selectedDate($event)">
+      </ng-daterangepicker> -->
+      <input *ngIf="languageid==1" type="text" placeholder="Select Date" [bsConfig]="{ showWeekNumbers:false }"
+        class="form-control" [(ngModel)]="value" (ngModelChange)="selectedDate($event)" bsDaterangepicker>
+      <input *ngIf="languageid==6" type="text" placeholder="Sélecteur de date" [bsConfig]="{ showWeekNumbers:false }"
+        class="form-control" [(ngModel)]="value" (ngModelChange)="selectedDate($event)" bsDaterangepicker>
+
+    </div>
+    <!-- <div class="col-lg-3">
+      <select class="form-control" [(ngModel)]="Ordertypeid" (change)="GetOrdertypeidID($event)">
+        <option value="0" selected>{{labels.select}}</option>
+        <option value="1">Pharmacy</option>
+        <option value="2">Shopping</option>
+      </select>
+    </div> -->
+    <div class="col-lg-3">
+      <input type="text" class="form-control" placeholder="Search" [(ngModel)]="term">
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-lg-12" style="overflow: auto;">
+      <table id="Appointment">
+        <thead>
+          <tr>
+            <th>{{labels.orderNumber}}</th>
+            <th>{{labels.order_Date}}</th>
+            <!-- <th>{{labels.oredrType}}</th> -->
+            <!-- <th>{{labels.pharmacy_Name}}</th> -->
+            <th>{{labels.pickUpAddress}}</th>
+            <th>{{labels.customer_Name}}</th>
+            <th>{{labels.phoneNo}}</th>
+            <th>{{labels.email}}</th>
+            <!-- <th>{{labels.deliveryAddress}}</th> -->
+            <th>{{labels.assigned_To}}</th>
+            <th>{{labels.assigned_To_PhoneNo}}</th>
+            <!-- <th>Image</th>
+            <th>Return Comments</th> -->
+            <th>{{labels.refundAmount}}</th>
+            <th>{{labels.order_Status}}</th>
+          </tr>
+          <tr *ngFor="let details of orderlist| paginate: { id: 'foo', itemsPerPage: 10, currentPage: p}|filter:term">
+            <td>{{details.medicalOrderID}}</td>
+            <td>{{details.orderDate|date}}</td>
+            <!-- <td>{{details.ordertype}}</td> -->
+            <!-- <td *ngIf="details.ordertype=='Pharmacy'">{{details.pharmacyName}}</td>
+            <td *ngIf="details.ordertype=='Shopping'">-</td> -->
+            <td>{{details.address}}</td>
+            <td>{{details.phoneNumber}}</td>
+            <td>{{details.mailID}}</td>
+            <td>{{details.name}}</td>
+            <!-- <td>{{details.address}}</td> -->
+            <td>{{details.returnassainname}}</td>
+            <td>{{details.returnassainphoneno}}</td>
+            <td>{{details.refundAmount}}</td>
+            <!-- <td>
+              <img src="assets/Images/imgicon.png" data-toggle="modal" data-target="#exampleModalLong2"
+                style="margin: 2%;width: 20px;" (click)="GetReturnImage(details.returnImage)" />&nbsp;
+            </td>
+            <td>{{details.returnComments}}</td> -->
+            <td style="color: green;">{{details.returnStatus}}</td>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+  <div class="col-lg-12" style="text-align: center">
+    <br>
+    <pagination-controls id="foo" (pageChange)="pageChanged($event)"  previousLabel="Previous" nextLabel="Next" screenReaderPaginationLabel="Pagination"
+      screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
+    </pagination-controls>
+  </div>
+</div>
+<br>

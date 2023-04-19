@@ -1,0 +1,77 @@
+.headerspace {
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+label {
+    margin-right: 10px;
+}
+
+.assign {
+    padding: 5px;
+    border: 2px solid #12b0e8;
+    color: #12b0e8;
+    border-radius: 10px;
+    font-weight: 600;
+    width: 100px;
+    margin-top: 5px;
+    font-size: 10px;
+}
+
+.assign:hover {
+    padding: 5px;
+    border: 2px solid #12b0e8;
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    width: 100px;
+    margin-top: 5px;
+    background-color: #12b0e8;
+    font-size: 10px;
+}
+
+.collect {
+    padding: 5px;
+    border: 2px solid green;
+    color: green;
+    border-radius: 10px;
+    font-weight: 600;
+    width: 100px;
+    margin-top: 5px;
+    font-size: 10px;
+}
+
+.collect:hover {
+    padding: 5px;
+    border: 2px solid green;
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    width: 100px;
+    margin-top: 5px;
+    background-color: green;
+    font-size: 10px;
+}
+
+
+.refund{
+    padding: 5px;
+    border: 2px solid red;
+    color: red;
+    border-radius: 10px;
+    font-weight: 600;
+    width: 100px;
+    margin-top: 5px;
+    font-size: 10px;
+}
+.refund:hover{
+    padding: 5px;
+    border: 2px solid red;
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    width: 100px;
+    margin-top: 5px;
+    background-color: red;
+    font-size: 10px;
+}

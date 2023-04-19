@@ -1,0 +1,136 @@
+<div class="container-fluid card card:hover headerspace">
+    <div class="row headerspace">
+      <div class="col-lg-9" style="margin-top: -2px;">
+        <h5>{{labels.deliveryCompany}}</h5>
+      </div>
+      <div class="col-lg-3" style="text-align:end;margin-top: -12px;">
+        <button *ngIf="languageid=='1'" type="button" routerLink="/PartnerRegistration" class="btn btncolor">Add
+          Employee</button>
+        <button *ngIf="languageid=='6'" type="button" routerLink="/PartnerRegistration"
+          class="btn btncolor">Ajouter</button>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="container-fluid card card:hover" style="overflow:auto;">
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-lg-3">
+        <input type="text" class="form-control" [(ngModel)]="term" placeholder="{{labels.search}}">
+      </div>
+    </div><br>
+    <div class="row">
+      <div class="col-lg-12" style="overflow: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th *ngIf="languageid=='1'">Staff Type</th>
+              <th *ngIf="languageid=='6'">Fonction</th>
+              <th>{{labels.name}}</th>
+              <th>{{labels.phoneNo}}</th>
+              <th>{{labels.email}}</th>
+              <th>Actions</th>
+            </tr>
+            <tr *ngFor="let details of partnerlist|filter:term">
+              <td *ngIf="details.staffType==1&&languageid==1">Delivery Supervisor</td>
+              <td *ngIf="details.staffType==2&&languageid==1">Delivery Executive</td>
+              <td *ngIf="details.staffType==1&&languageid==6">Responsable livraison</td>
+              <td *ngIf="details.staffType==2&&languageid==6">Personnel de livraison</td>
+              <td>{{details.name}}</td>
+              <td>{{details.phoneNo}}</td>
+              <td>{{details.emailID}}</td>
+  
+              <td>
+              
+                <ng-template #tipcontent1>Edit</ng-template>
+                <a  style="color:black">
+                  <img src="assets/Images/edit.png" style="width: 24px" data-toggle="modal" data-target="#exampleModal"
+                    (click)="GetDeatsils(details)">
+                </a>
+              </td>
+  
+            </tr>
+          </thead>
+        </table><br><br>
+      </div>
+    </div>
+  </div><br><br> 
+  
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="width: 700px;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{{labels.editPassword}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row" *ngIf="Showpassword=='0'">
+            <div class="col-lg-3">
+              <label>{{labels.enteryourpin}} </label>
+              <span class="required">*</span>
+            </div>
+            <div class="col-lg-6">
+              <input type="text" class="form-control" [(ngModel)]="Enteredpinno" name="Enteredpinno"
+                placeholder="{{labels.enteryourpin}}">
+            </div>
+          </div><br>
+          <div class="row" *ngIf="Showpassword=='0'">
+            <div class="col-lg-3">
+              <label>{{labels.password}} :</label>
+              <span class="required">*</span>
+            </div>
+            <div class="col-lg-6">
+              <input type="text" class="form-control" required [(ngModel)]="entercurrentpwd" name="entercurrentpwd"
+                placeholder="{{labels.password}}">
+            </div>
+            <div class="col-lg-2">
+              <button class="btn btncolor" (click)="CheckPasswordvalidate()">{{labels.validate}}</button>
+            </div>
+          </div>
+  
+          <div *ngIf="Showpassword=='1'">
+            <form #doctorForm="ngForm">
+              <div class="row">
+                <div class="col-lg-4">
+                  <label>{{labels.pinno}} :</label>
+                  <span class="required">*</span>
+                </div>
+                <div class="col-lg-6">
+                  <input type="text" class="form-control" disabled name="mypinno" required [(ngModel)]="mypinno">
+                </div>
+              </div>
+              <br>
+  
+              <div class="row">
+                <div class="col-lg-4">
+                  <label>{{labels.userName}} :</label>
+                  <span class="required">*</span>
+                </div>
+                <div class="col-lg-6">
+                  <input type="text" class="form-control" disabled name="username" required [(ngModel)]="username"
+                    placeholder="{{labels.userName}}"
+                    onkeypress='return(event.charCode>=65&&event.charCode<=90)||(event.charCode>=97&&event.charCode<=122)||event.charCode==32'>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-lg-4">
+                  <label>{{labels.password}} :</label>
+                  <span class="required">*</span>
+                </div>
+                <div class="col-lg-6">
+                  <input type="text" class="form-control" name="password" required [(ngModel)]="password"
+                    placeholder="{{labels.password}}">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="close" class="btn btncolor" data-dismiss="modal">{{labels.close}}</button>
+        </div>
+      </div>
+    </div>
+  </div>

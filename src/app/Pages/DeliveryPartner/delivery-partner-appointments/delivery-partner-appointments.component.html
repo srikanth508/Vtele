@@ -1,0 +1,117 @@
+<div class="container-fluid card card:hover headerspace">
+  <div class="row headerspace">
+    <div class="col-lg-12">
+      <h5>{{labels.shoppingdeliveryorders}}</h5>
+    </div>
+  </div>
+</div>
+<br>
+<div class="container-fluid card card:hover">
+  <div class="row" style="margin-top: 20px;">
+    <div class="col-lg-3">
+      <input type="text" placeholder="{{labels.selectDate}}" class="form-control" bsDaterangepicker [(ngModel)]="value"
+        (ngModelChange)="selectedDate(value)" [bsConfig]="{ isAnimated: true }">
+    </div>
+
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-lg-12" style="overflow: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>{{labels.orderNumber}}</th>
+            <th>{{labels.order_Date}}</th>
+            <th>{{labels.pickUpAddress}}</th>
+            <th>{{labels.customer_Name}}</th>
+            <th>{{labels.phoneNo}}</th>
+            <th>{{labels.deliveryAddress}}</th>
+            <th>{{labels.order_Status}}</th>
+            <th>{{labels.assigned_To}}</th>
+            <th>{{labels.assigned_To_PhoneNo}}</th>
+            <th style="width: 100px;">{{labels.actions}}</th>
+          </tr>
+          <tr *ngFor="let details of orderlist| paginate: { id: 'foo', itemsPerPage: 10, currentPage: p}|filter:term">
+            <td>{{details.medicalOrderID}}</td>
+            <td>{{details.orderDate|date}}</td>
+            <td>{{details.pharmacyaddress}}</td>
+            <td>{{details.phoneNumber}}</td>
+            <td>{{details.name}}</td>
+            <td>{{details.address}}</td>
+            <td *ngIf="details.deliveryCompanyAccept==3">{{labels.assignedd}}</td>
+            <td *ngIf="details.deliveryCompanyAccept==0">{{labels.arrived}}</td>
+            <td *ngIf="details.deliveryCompanyAccept==1">{{labels.accepted}}</td>
+            <td *ngIf="details.PickUpBit==1">{{labels.picked_Up}}</td>
+            <td *ngIf="details.DeliveredBit==1">{{labels.delivered}}</td>
+            <td>{{details.partnerName}}</td>
+            <td>{{details.partnerPhoneNo}}</td>
+            <td>
+              <span *ngIf="details.deliveryCompanyAccept==0">
+                <button type="button" style="background-color:#00b050; color: white;  width: 75px;" class="acceptbtn"
+                  (click)="acceptdelete(details.ordertypeid,details.medicalOrderID,1,details.id)">{{labels.accept}}</button>
+                <br>
+                <br>
+                <button type="button" class="rejbtn" style="background-color:#76611b; color: white;  width: 75px;"
+                  (click)="acceptdelete(details.ordertypeid,details.medicalOrderID,2,details.id)">{{labels.reject}}</button>
+              </span>
+              <span *ngIf="details.deliveryCompanyAccept==1">
+                <button type="button" class="asignbtn" style="background-color: #00b0f0; color: white;  width: 75px;"
+                  (click)="getid(details.ordertypeid,details.id)" data-toggle="modal"
+                  data-target="#asssign">{{labels.assign}}</button>
+              </span>
+              <span *ngIf="details.deliveryCompanyAccept==3">
+                <p class="asignedbtn">{{labels.assigned}}</p>
+              </span>
+            </td>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+  <br>
+  <div class="col-lg-12" style="text-align: end">
+    <pagination-controls id="foo" (pageChange)="pageChanged($event)" previousLabel="{{labels.previous}}"
+      nextLabel="{{labels.next}}" screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+      screenReaderCurrentLabel="You're on page">
+    </pagination-controls>
+  </div>
+</div>
+<br>
+
+
+
+<div id="asssign" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{labels.assign}}</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <table>
+              <tr>
+                <td style="background-color: #f18235;">{{labels.name}}</td>
+                <td style="background-color: #f18235;">{{labels.phoneNo}}</td>
+                <td style="background-color: #f18235;">{{labels.assign}}</td>
+              </tr>
+              <tr *ngFor="let details of partnerlist|filter:term">
+                <td>{{details.name}}</td>
+                <td>{{details.phoneNo}}</td>
+                <td>
+                  <button type="button" style="background-color: #00b0f0; color: white;  width: 75px;"
+                    (click)="asssign(details.id)" class="asignbtn" data-dismiss="modal">{{labels.assign}}</button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" style="background-color: #f18235; color: white;" class="btn btn-default"
+          data-dismiss="modal">{{labels.close}}</button>
+      </div>
+    </div>
+  </div>
+</div>

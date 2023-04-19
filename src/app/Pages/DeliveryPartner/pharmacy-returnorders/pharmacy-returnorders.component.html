@@ -1,0 +1,218 @@
+<div class="container-fluid card card:hover headerspace">
+  <div class="row headerspace">
+    <div class="col-lg-9" style="margin-top: -2px;">
+      <h5>{{labels.phamacyRrturnOrders}}</h5>
+    </div>
+    <div class="col-lg-3" style="text-align: end;margin-top: -12px;">
+      <!-- <button class="btn  btncolor" (click)="getglmasterexcel()">{{labels[0].exportExcel}}</button> -->
+    </div>
+  </div>
+</div><br>
+<div class="container-fluid card card:hover">
+  <div class="row" style="margin-top: 20px;">
+    <div class="col-lg-3">
+      <input type="text" placeholder="{{labels.selectDate}}" class="form-control" bsDaterangepicker [(ngModel)]="value"
+        (ngModelChange)="selectedDate(value)" [bsConfig]="{ isAnimated: true }">
+    </div>
+    <div class="col-lg-3">
+      <input type="text" class="form-control" [(ngModel)]="term" placeholder="{{labels.search}}">
+    </div>
+    <div class="col-lg-3">
+    </div>
+    <div class="col-lg-3" style="text-align: end;">
+      <label> {{labels.Count}} : {{count}}</label>
+    </div>
+  </div><br>
+  <div class="row">
+    <div class="col-lg-12" style="overflow: auto;">
+      <table id="Pharmacy">
+        <thead>
+          <tr>
+            <th>{{labels.orderDate}}</th>
+            <th>{{labels.orderNumber}}</th>
+            <!-- <th>{{labels[0].prescriptiontype}}</th> -->
+            <th>{{labels.pharmacyname}}</th>
+            <!-- <th>{{labels[0].phoneNo}} </th> -->
+            <th>{{labels.sustomerpickupaddress}}</th>
+            <th>{{labels.customername}}</th>
+            <th>{{labels.customerphoneno}}</th>
+            <th>{{labels.pharmacydeliveryaddress}}</th>
+            <th>{{labels.returncomments}}</th>
+            <th>{{labels.returnimages}}</th>
+            <th>{{labels.orderstatus}}</th>
+            <th>{{labels.assignto}}</th>
+            <th>{{labels.assignphoneno}}</th>
+            <th>{{labels.actions}}</th>
+            <!-- <th>{{labels[0].medicines}}</th> -->
+            <!-- <th>{{labels[0].status}}</th>
+              <th>{{labels[0].actions}}</th> -->
+          </tr>
+          <tr *ngFor="let details of orderlist|filter:term">
+            <td>{{details.date}}</td>
+            <td>{{details.id}}</td>
+            <!-- <td>
+                <span *ngIf="details.orderType=='1'">Online</span>
+                <span *ngIf="details.orderType=='2'">Photo</span>
+              </td> -->
+            <td>{{details.pharmacyName}}</td>
+            <!-- <td>{{details.mobileNumber}}</td> -->
+            <td>{{details.address}}</td>
+            <td>{{details.patientName}}</td>
+            <td>{{details.mobileNumber}}</td>
+            <td>{{details.pharmacyaddress}}</td>
+            <td>{{details.returnComments}}</td>
+            <td>
+              <img src="assets/Images/imgicon.png" data-toggle="modal" data-target="#exampleModalLong2"
+                style="margin: 2%;width: 20px;" (click)="GetReturnImage(details.id)" />&nbsp;
+            </td>
+            <td>
+              <span style="color:green">{{details.returnStatus}}</span>
+            </td>
+            <td>{{details.reutnPartnerName}}</td>
+            <td>{{details.returnPartnerPhoneNo}}</td>
+            <td>
+              <!-- <button class="asign" (click)="getid(details.id)" data-toggle="modal"
+                  data-target="#asssign">{{"assign"}}</button> -->
+              <button *ngIf="details.returnAssignBit=='0'" class="assign" (click)="getid(details.id)" data-bs-toggle="modal"
+                data-bs-target="#asssign">{{labels.assign}}</button>
+
+              <button *ngIf="details.collected=='0'&&details.returnAssignBit=='1'" type="button" class="collect" (click)="UpdateCollecteditem(details.id)">Collected</button>
+
+
+              <button type="button" class="refund" data-bs-toggle="modal" data-bs-target="#paymentmodal" *ngIf="details.collected=='1'&&details.refundBit=='0'"
+                (click)="GetRefundAmount(details.patientID,details.totalPrice,details.walletAmount,details.id,details.emailID)">Refund</button>
+
+
+            </td>
+          </tr>
+        </thead>
+      </table><br>
+    </div><br>
+  </div><br>
+</div><br><br><br>
+
+
+<div id="asssign" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">{{labels.assign}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <table>
+              <tr>
+                <th>{{labels.agentname}}</th>
+                <th>{{labels.agentphoneno}}</th>
+                <th>{{labels.assign}}</th>
+              </tr>
+              <tr *ngFor="let details of partnerlist|filter:term">
+                <td>{{details.name}}</td>
+                <td>{{details.phoneNo}}</td>
+                <td>
+                  <button (click)="asssign(details.id)" class="assign" data-dismiss="modal">{{labels.assign}}</button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="close" data-bs-dismiss="modal">{{labels.close}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModalLong2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Return Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-6" *ngFor="let image of retunphotos">
+              <br>
+              <img src="{{image.photourl}}" style="height: 300px;width:300px" />
+              <br>
+            </div>
+            <br>
+          </div>
+          <br>
+          <br>
+        </div>
+      </div>
+      <br>
+      <div class="modal-footer">
+        <button type="button" style="background-color: #f18235; color: white;" class="btn btn-default"
+          data-dismiss="modal">{{"close"}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div id="paymentmodal" class="modal fade" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">{{labels.refundAmount}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form #feesForm="ngForm">
+
+            <div class="row">
+              <div class="col-lg-3">
+                <label>Paid Amount </label>
+              </div>
+              <div class="col-lg-8">
+                <input type="text" class="form-control" disabled placeholder="Paid Amount" [(ngModel)]="totalprice"
+                  name="totalprice">
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-lg-3">
+                <label>Amount </label>
+              </div>
+              <div class="col-lg-8">
+                <input type="text" class="form-control" placeholder="Amount" required [(ngModel)]="money" name="money"
+                  (ngModelChange)="GetAddMoneyToWallet(money)"
+                  onkeypress='return(event.charCode>=48&&event.charCode<=57)'>
+              </div>
+            </div>
+            <br>
+
+            <div class="row">
+              <div class="col-lg-5">
+              </div>
+              <div class="col-lg-2">
+                <button class="btn btn-primary" [disabled]="feesForm.form.invalid"
+                  (click)="updatedateails()">{{labels.refund}}</button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div> -->
+    </div>
+  </div>
+</div>

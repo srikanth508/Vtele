@@ -1,0 +1,144 @@
+<app-loader *ngIf="loader==true"></app-loader>
+<app-sms></app-sms>
+<div class="container-fluid headercard card-hover headerspace">
+    <div class="row">
+        <div class="col-lg-4">
+            <h5>{{labels.doctorSlots}}</h5>
+        </div>
+        <div class="col-lg-3">
+            <input type="text" placeholder="Select Date" class="form-control" [(ngModel)]="appointmentDate" bsDatepicker
+                [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }"
+                (ngModelChange)="getendDate(appointmentDate)">
+        </div>
+
+        <!-- <div class="col-lg-3">
+            <label>{{labels.typeAppointment}}: {{typeofAppointment}}</label>
+        </div> -->
+        <div class="col-lg-3">
+            <select class="form-control" (change)="GetAppointmentTypeID($event)" [(ngModel)]="appointmentTypeID"
+                name="appointmentTypeID">
+                <option value="0" selected>{{labels.selectAppType}}</option>
+                <option value="1">{{labels.inClinic}}</option>
+                <option value="2">{{labels.videoCall}}</option>
+                <option value="5">{{labels.homeVisit}}</option>
+            </select>
+        </div>
+    </div>
+</div><br>
+
+<div class="container card"
+    *ngIf="doctorslots.length==0&&afternoonSLots.length==0&&eveningSlots.length==0&&nightSlots.length==0">
+    <p class="noslot">
+        {{labels.noslots}}
+    </p>
+
+</div>
+
+
+<div *ngIf="doctorslots.length!=0||afternoonSLots.length!=0||eveningSlots.length!=0||nightSlots.length!=0">
+    <div class="container">
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-2">
+                    <h4>{{labels.morning}}</h4>
+                </div>
+            </div>
+            <div class="row" style="margin-left: 5px;">
+                <br>
+                <div class="col-lg-2" style="margin-left: 15px; " *ngFor="let slot of doctorslots">
+                    <br>
+                    <button [routerLink]="['/Doctor/BookAppointment',slot.doctorSlotID,slot.slotName,slot.doctorFees]"
+                        class="slotbox" [disabled]="appointmentTypeID==2">{{slot.slotName}}</button>
+                    <br>
+                </div>
+                <br>
+            </div><br>
+        </div><br>
+
+    </div>
+
+
+
+
+    <div class="container">
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-2" style="margin-left: 15px;">
+                    <h4>{{labels.afternoon}}</h4>
+
+                </div>
+            </div>
+            <br>
+            <div class="row" style="margin-left: 5px;">
+                <br>
+                <div class="col-lg-2" style="margin-left: 15px;" *ngFor="let slot of afternoonSLots">
+                    <br>
+                    <button [routerLink]="['/Doctor/BookAppointment',slot.doctorSlotID,slot.slotName,slot.doctorFees]"
+                        class="slotbox" [disabled]="appointmentTypeID==2">{{slot.slotName}}</button>
+                </div>
+                <br>
+            </div>
+            <br>
+        </div>
+        <br>
+    </div>
+
+
+
+
+    <div class="container">
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-2" style="margin-left: 15px;">
+                    <h4>{{labels.evening}}</h4>
+
+                </div>
+            </div>
+            <br>
+            <div class="row" style="margin-left: 5px;">
+                <br>
+                <div class="col-lg-2" style="margin-left: 15px; " *ngFor="let slot of eveningSlots">
+                    <br>
+                    <button [routerLink]="['/Doctor/BookAppointment',slot.doctorSlotID,slot.slotName,slot.doctorFees]"
+                        class="slotbox" [disabled]="appointmentTypeID==2">{{slot.slotName}}</button>
+                </div>
+                <br>
+            </div>
+            <br>
+        </div>
+        <br>
+    </div>
+
+
+    <div class="container">
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-2" style="margin-left: 15px;">
+                    <h4>{{labels.night}}</h4>
+                </div>
+            </div>
+            <br>
+            <div class="row" style="margin-left: 5px;">
+                <br>
+                <div class="col-lg-2" style="margin-left: 15px; " *ngFor="let slot of nightSlots">
+                    <br>
+                    <button [routerLink]="['/Doctor/BookAppointment',slot.doctorSlotID,slot.slotName,slot.doctorFees]"
+                        class="slotbox" [disabled]="appointmentTypeID==2">{{slot.slotName}}</button>
+                </div>
+                <br>
+            </div>
+            <br>
+        </div>
+        <br>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2">
+                <button class="close" *ngIf="showback==1"
+                    routerLink="/HospitalClinic/HospitalAppoinments">{{labels.back}}</button>
+                <button class="close" *ngIf="showback==2" routerLink="/Doctor/RecpAppointments">{{labels.back}}</button>
+            </div>
+        </div>
+    </div><br>
+</div>

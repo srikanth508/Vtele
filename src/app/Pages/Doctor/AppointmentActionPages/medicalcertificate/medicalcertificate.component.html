@@ -1,0 +1,99 @@
+<app-sms></app-sms>
+<app-loader *ngIf="loader==true"></app-loader>
+<div class="container-fluid" *ngIf="popup==0">
+    <form #MedicalForm="ngForm">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control inputfield" id="floatingInput" placeholder="Doctor name"
+                        disabled [(ngModel)]="patientName" name="patientName">
+                    <label for="floatingInput" class="floatingLabel">{{labels.patientname}}</label>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control inputfield" id="floatingInput" placeholder="Doctor name"
+                        disabled [(ngModel)]="mobileNumber" name="mobileNumber">
+                    <label for="floatingInput" class="floatingLabel">{{labels.phonenumber}}</label>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control inputfield" id="floatingInput" placeholder="Email" disabled
+                        [(ngModel)]="emailID" name="emailID">
+                    <label for="floatingInput" class="floatingLabel">{{labels.emialID}}</label>
+                </div>
+            </div>
+        </div><br>
+        <div class="row">
+            <div class="col-lg-4">
+                <input type="text" placeholder="{{labels.startDate}}" class="form-control" required
+                    [(ngModel)]="startDate" name="startDate" bsDatepicker
+                    [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }"
+                    (ngModelChange)="getStartDate(startDate)">
+
+            </div>
+            <div class="col-lg-4">
+                <input type="text" placeholder="{{labels.endDate}}" class="form-control" [(ngModel)]="endDate"
+                    name="endDate" bsDatepicker [bsConfig]="{ isAnimated: true, dateInputFormat: 'YYYY-MM-DD' }"
+                    required (ngModelChange)="getendDate(endDate)">
+
+            </div>
+            <div class="col-lg-4">
+                <input type="radio" value="1" [(ngModel)]="leaveTyepe" name="leaveTyepe" required
+                    (change)="Getscholladate()">&nbsp;&nbsp;{{labels.school}}&nbsp;&nbsp;
+                <input type="radio" value="2" [(ngModel)]="leaveTyepe" name="leaveTyepe" required
+                    (change)="Getscholladate()">&nbsp;&nbsp;{{labels.office}}
+            </div>
+
+        </div><br>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="Notes" [(ngModel)]="notes" name="notes"
+                        id="floatingTextarea"></textarea>
+                    <label for="floatingTextarea">{{labels.notes}}</label>
+                </div>
+            </div>
+
+        </div><br>
+        <div class="row">
+            <div class="col-lg-12">
+                <button class="save" [disabled]="MedicalForm.form.invalid"
+                    (click)="formatdata()">{{labels.save}}</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- *ngIf="popup==1" -->
+<div *ngIf="popup==1">
+    <div class="row">
+        <div class="col-lg-8">
+          <label><b>{{labels.patientName}}</b> : {{Details[0].patientName}}</label><br>
+          <label><b>{{labels.phoneNumber}}</b> : {{Details[0].mobileNumber}}</label><br>
+          <label><b>{{labels.address}}</b> : {{Details[0].patientaddress}}</label><br>
+          <label><b>{{labels.emialID}}</b> : {{Details[0].emailID}}</label><br>
+          <label><b>{{labels.nationalIDNo}}</b> : {{Details[0].nationalidno}}</label><br>
+          <label><b>{{labels.age}}</b> : {{Details[0].age}}</label><br>
+          <label><b>{{labels.dateofBirth}}</b> : {{Details[0].dateOfBirth}}</label><br>
+          <label><b>{{labels.gender}}</b> : {{Details[0].gender}}</label><br>
+          <label><b>{{labels.appointmentNumber}}</b> : {{appointmentID}}</label><br>
+        </div>
+       
+        <div class="col-lg-4">
+          <label><b>{{labels.doctorName}}</b> : {{Details[0].doctorName}}</label><br>
+          <label><b>{{labels.registration}}</b> : {{Details[0].registrationNo}}</label><br>
+          <label><b>{{labels.phoneNumber}}</b> : {{Details[0].doctorMobileNo}}</label><br>
+          <label><b>{{labels.department}}</b> : {{Details[0].departmentname}}</label><br>
+          <label><b>{{labels.address}}</b> : {{Details[0].doctorAddress}}</label><br>
+        </div>
+        <br>
+      </div>
+      <br>
+      
+    <p [innerHTML]="desc"></p>
+
+    <button class="save" 
+    (click)="generateMedicalCertificate()">{{labels.saveSendtoPatient}}</button>
+</div>

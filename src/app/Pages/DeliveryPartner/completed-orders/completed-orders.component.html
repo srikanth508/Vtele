@@ -1,0 +1,110 @@
+<div class="container-fluid card card:hover headerspace">
+    <div class="row headerspace">
+      <div class="col-lg-3">
+        <h5>{{labels.shoppingcompletedorders}}</h5>
+      </div>
+      <div class="col-lg-6"></div>
+      <br>
+      <div class="col-lg-2">
+        <!-- <button style="height:35px;background-color: #f18235;color:white" class="btn btn-block btncolor" (click)="getglmasterexcel()">
+          {{labels.export_To_Excel}}</button> -->
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="container-fluid card card:hover">
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-lg-3">
+        <!-- <ng-daterangepicker [(ngModel)]="value" [options]="options" (ngModelChange)="selectedDate($event)">
+        </ng-daterangepicker> -->
+        <input *ngIf="languageid==1" type="text" placeholder="Select Date" [bsConfig]="{ showWeekNumbers:false }"
+          class="form-control" [(ngModel)]="value" (ngModelChange)="selectedDate($event)" bsDaterangepicker>
+        <input *ngIf="languageid==6" type="text" placeholder="Sélecteur de date" [bsConfig]="{ showWeekNumbers:false }"
+          class="form-control" [(ngModel)]="value" (ngModelChange)="selectedDate($event)" bsDaterangepicker>
+      </div>
+      <div class="col-lg-3">
+        <select class="form-control" [(ngModel)]="Ordertypeid" (change)="GetOrdertypeidID($event)">
+          <option value="0" selected>{{labels.select}}</option>
+          <option *ngIf="languageid=='1'" value="1">Pharmacy</option>
+          <option *ngIf="languageid=='1'" value="2">Shopping</option>
+          <option *ngIf="languageid=='6'" value="1">Pharmacie</option>
+          <option *ngIf="languageid=='6'" value="2">Shopping</option>
+        </select>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-lg-12">
+        <table id="Doc">
+          <thead>
+            <tr>
+              <th>{{labels.orderNumber}}</th>
+              <th>{{labels.order_Date}}</th>
+              <!-- <th>{{labels.oredrType}}</th> -->
+              <th>{{labels.customer_Name}}</th>
+              <th>{{labels.phoneNo}}</th>
+              <th>{{labels.email}}</th>
+              <th>{{labels.deliveryAddress}}</th>
+              <th>{{labels.assigned_To}}</th>
+              <th>{{labels.assigned_To_PhoneNo}}</th>
+            </tr>
+            <tr *ngFor="let details of orderlist| paginate: { id: 'foo', itemsPerPage: 10, currentPage: p}|filter:term">
+              <td>{{details.medicalOrderID}}</td>
+              <td>{{details.orderDate|date}}</td>
+              <!-- <td>{{details.ordertype}}</td> -->
+              <td>{{details.phoneNumber}}</td>
+              <td>{{details.mailID}}</td>
+              <td>{{details.name}}</td>
+              <td>{{details.address}}</td>
+              <td>{{details.partnerName}}</td>
+              <td>{{details.partnerPhoneNo}}</td>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+    <div class="col-lg-12" style="text-align: center">
+      <br>
+      <pagination-controls id="foo" (pageChange)="pageChanged($event)" previousLabel="Previous" nextLabel="Next" screenReaderPaginationLabel="Pagination"
+        screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page">
+      </pagination-controls>
+    </div>
+  </div>
+  <br>
+  
+  
+  
+  <div id="asssign" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">{{labels.assign}}</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <table>
+                <tr>
+                  <td>{{labels.name}}</td>
+                  <td>{{labels.phoneNo}}</td>
+                  <td>{{labels.assign}}</td>
+                </tr>
+                <tr *ngFor="let details of partnerlist|filter:term">
+                  <td>{{details.name}}</td>
+                  <td>{{details.phoneNo}}</td>
+                  <td>
+                    <button type="button" (click)="asssign(details.id)" class="asignbtn"
+                      data-dismiss="modal">{{labels.assign}}</button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">{{labels.close}}</button>
+        </div>
+      </div>
+    </div>
+  </div>

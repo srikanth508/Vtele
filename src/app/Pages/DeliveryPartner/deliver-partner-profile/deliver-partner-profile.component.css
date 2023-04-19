@@ -1,0 +1,12 @@
+.headerspace{
+    margin-top: 10px;
+    text-transform:uppercase;
+  }
+
+
+		label::first-letter{
+      text-transform: uppercase;
+    }
+    label{
+      text-transform: lowercase;
+    }
