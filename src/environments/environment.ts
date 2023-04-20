@@ -5,11 +5,12 @@
 export const environment = {
   production: false,
   //live
-  //API_URL:"https://maroc.voiladoc.org/marocAPI",
-  //adminEmails: 1
+ API_URL:"http://vtele.voiladoc.org/VteleAPI",
+ adminEmails: 1
   //test
-  API_URL: "https://maroc.voiladoc.org/VoilaDocTestAPI",
-  adminEmails: 0
+  //API_URL: "http://vtele.voiladoc.org/VteleAPI",
+ // API_URL:'http://localhost:4199',
+ // adminEmails: 0
 
 };
 
